@@ -57,7 +57,7 @@ export default function EventDetailPage({ params }: { params: { eventId: string 
             </div>
 
             {/* Metric Cards */}
-            <div className="metrics-grid">
+            <div className="event-metrics-grid">
                 <MetricCard
                     icon={<Send size={24} />}
                     label="Mails Sent"

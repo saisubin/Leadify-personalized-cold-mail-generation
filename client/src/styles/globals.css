@@ -1356,3 +1356,21 @@ body {
     color: var(--text-primary);
     font-weight: 500;
 }
+/* Event Detail Metrics Grid - 4 columns in single row */
+.event-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-lg);
+}
+
+@media (max-width: 1200px) {
+    .event-metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .event-metrics-grid {
+        grid-template-columns: 1fr;
+    }
+}
