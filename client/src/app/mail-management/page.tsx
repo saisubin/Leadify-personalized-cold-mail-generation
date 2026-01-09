@@ -42,7 +42,8 @@ export default function MailManagementPage() {
             mailsSent: 0
         };
 
-        const updatedEvents = [...events, newEvent];
+        // Prepend new event to show it at the top
+        const updatedEvents = [newEvent, ...events];
         setEvents(updatedEvents);
 
         // Persist to localStorage
