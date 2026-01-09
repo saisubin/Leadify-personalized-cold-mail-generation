@@ -1136,18 +1136,20 @@ body {
     align-items: center;
     gap: var(--spacing-sm);
     padding: var(--spacing-md);
-    background-color: var(--accent-blue);
-    color: white;
-    border: none;
+    background-color: transparent;
+    color: var(--accent-blue);
+    border: 1px solid var(--accent-blue);
     border-radius: var(--radius-md);
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color var(--transition-fast);
+    transition: all var(--transition-fast);
 }
 
 .upload-csv-btn:hover {
-    background-color: var(--accent-blue-hover);
+    background-color: rgba(59, 130, 246, 0.1);
+    border-color: var(--accent-blue-hover);
+    color: var(--accent-blue-hover);
 }
 
 .error-message {
