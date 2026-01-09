@@ -1518,3 +1518,8 @@ body {
         order: 1;
     }
 }
+
+/* Hide Next.js dev tools indicator */
+[data-nextjs-dev-tools-indicator] {
+    display: none !important;
+}
