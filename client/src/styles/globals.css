@@ -1424,6 +1424,7 @@ body {
     background-color: rgba(239, 68, 68, 0.1);
     color: #ef4444;
 }
+
 /* ===========================
    Pagination
    =========================== */
@@ -1431,7 +1432,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-lg) 0;
+    padding: var(--spacing-lg) var(--spacing-xl);
     margin-top: var(--spacing-lg);
     border-top: 1px solid var(--border-color);
 }
@@ -1509,11 +1510,11 @@ body {
         flex-direction: column;
         gap: var(--spacing-md);
     }
-    
+
     .pagination-info {
         order: 2;
     }
-    
+
     .pagination-controls {
         order: 1;
     }
