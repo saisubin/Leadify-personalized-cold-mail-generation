@@ -20,17 +20,34 @@ const MOCK_EVENTS = [
 export default function MailManagementPage() {
     const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [events, setEvents] = useState(MOCK_EVENTS);
+    const [events, setEvents] = useState<typeof MOCK_EVENTS>([]);
+
+    // Load events from localStorage on mount
+    React.useEffect(() => {
+        const storedEvents = localStorage.getItem('mail-events');
+        if (storedEvents) {
+            setEvents(JSON.parse(storedEvents));
+        } else {
+            // Initialize with mock events if no stored events
+            setEvents(MOCK_EVENTS);
+            localStorage.setItem('mail-events', JSON.stringify(MOCK_EVENTS));
+        }
+    }, []);
 
     const handleCreateEvent = (eventName: string, context: string, file: File) => {
-        // Create new event (mock implementation)
+        // Create new event
         const newEvent = {
             id: `event-${Date.now()}`,
             name: eventName,
             mailsSent: 0
         };
 
-        setEvents([...events, newEvent]);
+        const updatedEvents = [...events, newEvent];
+        setEvents(updatedEvents);
+
+        // Persist to localStorage
+        localStorage.setItem('mail-events', JSON.stringify(updatedEvents));
+
         setIsModalOpen(false);
 
         // Navigate to review page
