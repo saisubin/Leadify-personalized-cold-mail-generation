@@ -18,6 +18,8 @@ export default function NewEventModal({
     const [context, setContext] = useState('');
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [errors, setErrors] = useState({ eventName: '', context: '', file: '' });
+    const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     if (!isOpen) return null;
@@ -31,8 +33,16 @@ export default function NewEventModal({
                 setSelectedFile(file);
                 setErrors(prev => ({ ...prev, file: '' }));
             } else {
+                // Reset file input
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = '';
+                }
                 setSelectedFile(null);
                 setErrors(prev => ({ ...prev, file: 'Please upload a CSV file' }));
+                // Show toast notification
+                setToastMessage('Invalid file type. Please upload a CSV file.');
+                setShowToast(true);
+                setTimeout(() => setShowToast(false), 3000);
             }
         }
     };
@@ -160,6 +170,13 @@ export default function NewEventModal({
                     </button>
                 </div>
             </div>
+
+            {/* Toast Notification */}
+            {showToast && (
+                <div className="toast show error">
+                    {toastMessage}
+                </div>
+            )}
         </div>
     );
 }
