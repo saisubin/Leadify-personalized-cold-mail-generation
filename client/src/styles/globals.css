@@ -1379,3 +1379,39 @@ body {
         grid-template-columns: 1fr;
     }
 }
+/* File Tag for uploaded CSV */
+.file-tag {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: rgba(59, 130, 246, 0.1);
+    border: 1px solid var(--accent-blue);
+    border-radius: var(--radius-md);
+    color: var(--accent-blue);
+    font-size: 0.875rem;
+    width: fit-content;
+}
+
+.file-tag .file-name {
+    flex: 1;
+    font-weight: 500;
+}
+
+.remove-file-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    background: transparent;
+    border: none;
+    color: var(--accent-blue);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.remove-file-btn:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}

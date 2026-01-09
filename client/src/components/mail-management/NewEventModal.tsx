@@ -143,13 +143,35 @@ export default function NewEventModal({
                         <label className="form-label">
                             Upload CSV <span className="required">*</span>
                         </label>
-                        <button
-                            className="upload-csv-btn"
-                            onClick={() => fileInputRef.current?.click()}
-                        >
-                            <Upload size={16} />
-                            {selectedFile ? selectedFile.name : 'Upload CSV'}
-                        </button>
+
+                        {selectedFile ? (
+                            <div className="file-tag">
+                                <Upload size={16} />
+                                <span className="file-name">{selectedFile.name}</span>
+                                <button
+                                    className="remove-file-btn"
+                                    onClick={() => {
+                                        setSelectedFile(null);
+                                        if (fileInputRef.current) {
+                                            fileInputRef.current.value = '';
+                                        }
+                                    }}
+                                    type="button"
+                                >
+                                    <X size={16} />
+                                </button>
+                            </div>
+                        ) : (
+                            <button
+                                className="upload-csv-btn"
+                                onClick={() => fileInputRef.current?.click()}
+                                type="button"
+                            >
+                                <Upload size={16} />
+                                Upload CSV
+                            </button>
+                        )}
+
                         <input
                             ref={fileInputRef}
                             type="file"
