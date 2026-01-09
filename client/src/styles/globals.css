@@ -739,7 +739,8 @@ body {
    =========================== */
 .app-layout {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
     background-color: var(--bg-primary);
 }
 
@@ -750,6 +751,11 @@ body {
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
 }
 
 .sidebar-header {
@@ -796,7 +802,9 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    margin-left: 276px;
+    height: 100vh;
+    overflow-y: auto;
 }
 
 /* ===========================
@@ -1379,6 +1387,7 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
 /* File Tag for uploaded CSV */
 .file-tag {
     display: flex;
