@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import EventCard from '@/components/EventCard';
-import NewEventModal from '@/components/NewEventModal';
+import EventCard from '@/components/mail-management/EventCard';
+import NewEventModal from '@/components/mail-management/NewEventModal';
 
 // Mock events data
 const MOCK_EVENTS = [

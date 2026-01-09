@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Leadify - AI Email Outreach Platform
+
+Leadify is an AI-powered email outreach platform that helps you generate personalized cold emails at scale.
+
+## Project Structure
+
+```
+Sol-Z/
+├── client/              # Frontend (Next.js)
+│   ├── src/
+│   │   ├── app/         # Next.js pages & layouts
+│   │   ├── components/  # React components (organized by feature)
+│   │   └── styles/      # CSS files
+│   └── public/          # Static assets
+│
+├── server/              # Backend API (Future)
+│   └── src/
+│       ├── api/         # API routes
+│       ├── services/    # Business logic
+│       └── models/      # Data models
+│
+├── shared/              # Shared code between frontend and backend
+│   ├── types/           # TypeScript interfaces
+│   └── constants/       # Shared constants
+│
+├── docs/                # Documentation
+└── prototype/           # Original HTML prototype (reference)
+```
 
 ## Getting Started
 
-First, run the development server:
+### Frontend Development
 
 ```bash
+cd client
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application will be available at [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Backend Development
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Backend is not yet implemented. See `server/` directory for placeholder structure.
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+- **Dashboard**: Overview of email outreach metrics
+- **Mail Management**: Create and manage email campaigns (events)
+- **Email Review**: Review and edit AI-generated emails before sending
+- **Suppressed Mail IDs**: Manage bounced and unsubscribed email addresses
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Frontend
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Custom CSS with CSS variables
+- **Icons**: Lucide React
+- **CSV Parsing**: PapaParse
 
-## Deploy on Vercel
+### Backend (Planned)
+- API framework TBD (Express.js or Next.js API routes)
+- Database TBD
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Documentation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See `docs/` directory for detailed documentation.
+
+## License
+
+ISC

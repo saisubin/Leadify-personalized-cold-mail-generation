@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ChevronRight, Paperclip, Send } from 'lucide-react';
 import Papa from 'papaparse';
-import Sidebar from '@/components/Sidebar';
-import PreviewPanel from '@/components/PreviewPanel';
-import UploadModal from '@/components/UploadModal';
-import Toast from '@/components/Toast';
+import Sidebar from '@/components/mail-management/Sidebar';
+import PreviewPanel from '@/components/mail-management/PreviewPanel';
+import UploadModal from '@/components/common/UploadModal';
+import Toast from '@/components/common/Toast';
 
 interface Lead {
     name: string;

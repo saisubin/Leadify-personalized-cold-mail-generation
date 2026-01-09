@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Send, Mail, Reply, Ban, ChevronRight } from 'lucide-react';
-import MetricCard from '@/components/MetricCard';
+import MetricCard from '@/components/dashboard/MetricCard';
 
 type MetricType = 'sent' | 'opened' | 'replied' | 'suppressed';
 
