@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Send, Mail, Reply, Ban, ChevronRight } from 'lucide-react';
 import MetricCard from '@/components/dashboard/MetricCard';
+import Pagination from '@/components/common/Pagination';
 
 type MetricType = 'sent' | 'opened' | 'replied' | 'suppressed';
 
@@ -39,8 +40,15 @@ const MOCK_DATA = {
 
 export default function EventDetailPage({ params }: { params: { eventId: string } }) {
     const [selectedMetric, setSelectedMetric] = useState<MetricType>('sent');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     const tableData = MOCK_DATA[selectedMetric];
+
+    // Calculate pagination
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentTableData = tableData.slice(indexOfFirstItem, indexOfLastItem);
 
     return (
         <div className="page-container">
@@ -101,7 +109,7 @@ export default function EventDetailPage({ params }: { params: { eventId: string 
                         </tr>
                     </thead>
                     <tbody>
-                        {tableData.map((row, index) => (
+                        {currentTableData.map((row, index) => (
                             <tr key={index}>
                                 <td>{row.mailId}</td>
                                 <td>{row.name}</td>
@@ -112,6 +120,13 @@ export default function EventDetailPage({ params }: { params: { eventId: string 
                         ))}
                     </tbody>
                 </table>
+
+                <Pagination
+                    currentPage={currentPage}
+                    totalItems={tableData.length}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={setCurrentPage}
+                />
             </div>
         </div>
     );

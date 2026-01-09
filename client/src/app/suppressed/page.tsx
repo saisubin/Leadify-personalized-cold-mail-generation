@@ -1,4 +1,12 @@
+'use client';
+
+import { useState } from 'react';
+import Pagination from '@/components/common/Pagination';
+
 export default function SuppressedPage() {
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
     // Mock suppressed email data
     const suppressedEmails = [
         { id: 1, email: 'bounced@example.com', reason: 'Hard Bounce', date: '2026-01-05' },
@@ -10,6 +18,11 @@ export default function SuppressedPage() {
         { id: 7, email: 'error@provider.com', reason: 'Delivery Error', date: '2025-12-28' },
         { id: 8, email: 'rejected@inbox.com', reason: 'Rejected', date: '2025-12-27' },
     ];
+
+    // Calculate pagination
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = suppressedEmails.slice(indexOfFirstItem, indexOfLastItem);
 
     return (
         <div className="suppressed-container">
@@ -28,7 +41,7 @@ export default function SuppressedPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {suppressedEmails.map((item) => (
+                        {currentItems.map((item) => (
                             <tr key={item.id}>
                                 <td className="email-cell">{item.email}</td>
                                 <td className="reason-cell">{item.reason}</td>
@@ -37,6 +50,13 @@ export default function SuppressedPage() {
                         ))}
                     </tbody>
                 </table>
+
+                <Pagination
+                    currentPage={currentPage}
+                    totalItems={suppressedEmails.length}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={setCurrentPage}
+                />
             </div>
 
             {suppressedEmails.length === 0 && (
