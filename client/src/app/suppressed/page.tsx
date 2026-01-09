@@ -31,9 +31,7 @@ export default function SuppressedPage() {
                         {suppressedEmails.map((item) => (
                             <tr key={item.id}>
                                 <td className="email-cell">{item.email}</td>
-                                <td className="reason-cell">
-                                    <span className="reason-badge">{item.reason}</span>
-                                </td>
+                                <td className="reason-cell">{item.reason}</td>
                                 <td className="date-cell">{item.date}</td>
                             </tr>
                         ))}
