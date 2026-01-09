@@ -943,14 +943,13 @@ body {
 }
 
 .suppressed-table th {
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
     text-align: left;
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     font-weight: 600;
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border-bottom: 1px solid var(--border-color);
 }
 
 .suppressed-table tbody tr {
@@ -967,7 +966,7 @@ body {
 }
 
 .suppressed-table td {
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
     font-size: 0.875rem;
 }
 
