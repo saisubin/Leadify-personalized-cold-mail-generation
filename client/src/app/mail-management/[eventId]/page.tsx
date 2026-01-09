@@ -51,7 +51,10 @@ export default function EventDetailPage({ params }: { params: { eventId: string 
                 <span className="breadcrumb-current">Event 1</span>
             </div>
 
-            <h1 className="page-title">Event 1</h1>
+            {/* Page Header */}
+            <div className="page-header">
+                <h1 className="page-title">Event 1</h1>
+            </div>
 
             {/* Metric Cards */}
             <div className="metrics-grid">
