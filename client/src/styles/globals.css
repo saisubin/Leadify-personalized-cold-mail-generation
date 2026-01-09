@@ -1125,8 +1125,10 @@ body {
 }
 
 .form-textarea {
-    resize: vertical;
-    min-height: 100px;
+    resize: none;
+    height: 120px;
+    overflow-y: auto;
+    font-family: inherit;
 }
 
 .upload-csv-btn {
@@ -1159,7 +1161,7 @@ body {
     display: flex;
     justify-content: flex-end;
     gap: var(--spacing-md);
-    padding-top: var(--spacing-lg);
+    padding: var(--spacing-lg) var(--spacing-xl);
     border-top: 1px solid var(--border-color);
 }
 
@@ -1356,6 +1358,7 @@ body {
     color: var(--text-primary);
     font-weight: 500;
 }
+
 /* Event Detail Metrics Grid - 4 columns in single row */
 .event-metrics-grid {
     display: grid;
