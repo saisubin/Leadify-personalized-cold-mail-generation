@@ -25,10 +25,13 @@ export default function NewEventModal({
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
-            if (file.name.endsWith('.csv')) {
+            const isCSV = file.name.endsWith('.csv') || file.type === 'text/csv' || file.type === 'application/vnd.ms-excel';
+
+            if (isCSV) {
                 setSelectedFile(file);
                 setErrors(prev => ({ ...prev, file: '' }));
             } else {
+                setSelectedFile(null);
                 setErrors(prev => ({ ...prev, file: 'Please upload a CSV file' }));
             }
         }
