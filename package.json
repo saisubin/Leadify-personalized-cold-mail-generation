@@ -1,0 +1,13 @@
+{
+  "name": "leadify",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-powered email outreach platform",
+  "scripts": {
+    "dev:client": "cd client && npm run dev",
+    "build:client": "cd client && npm run build",
+    "start:client": "cd client && npm start",
+    "dev:server": "cd server && npm run dev",
+    "lint": "cd client && npm run lint"
+  }
+}
