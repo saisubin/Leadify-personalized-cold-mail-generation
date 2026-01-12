@@ -83,4 +83,6 @@ Leadify is a powerful AI-driven application designed to streamline personalized 
 6.  **Access the App**
     Open [http://localhost:3000](http://localhost:3000) to view the application.
 
+## License
 
+This project is licensed under the MIT License.
