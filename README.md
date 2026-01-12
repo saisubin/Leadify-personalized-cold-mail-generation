@@ -1,7 +1,7 @@
 # Leadify - Personalized Cold Mail Generation
 
 Leadify is a powerful AI-driven application designed to streamline personalized cold outreach. It automates the process of generating, managing, and reviewing cold emails, helping users scale their outreach efforts while maintaining a personal touch.
-
+##  lATEST BRANCH - main
 ## Features
 
 -   **Dashboard Analytics**: Visualize outreach performance with metrics like Total Mails Sent, Opened, Replied, and Suppressed IDs.
