@@ -2,234 +2,71 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronRight, Paperclip, Send } from 'lucide-react';
-import Papa from 'papaparse';
+import { useParams } from 'next/navigation';
+import { ChevronRight, Paperclip, Send, Loader2, AlertCircle, RefreshCw } from 'lucide-react';
 import Sidebar from '@/components/mail-management/Sidebar';
 import PreviewPanel from '@/components/mail-management/PreviewPanel';
-import UploadModal from '@/components/common/UploadModal';
+import { api } from '@/lib/api';
 import Toast from '@/components/common/Toast';
 
-interface Lead {
-    name: string;
-    company: string;
-    designation: string;
-    industry: string;
-    email: string;
-    web_url: string;
-}
+export default function CampaignReviewPage() {
+    const params = useParams();
+    const campaignId = params.eventId as string;
 
-interface Email {
-    from: string;
-    to: string;
-    cc: string;
-    subject: string;
-    body: string;
-    attachments: string[];
-    lead: Lead;
-}
-
-// Sample data
-const SAMPLE_LEADS: Lead[] = [
-    {
-        name: 'Nathan Williams',
-        company: 'TechCorp Solutions',
-        designation: 'CEO',
-        industry: 'Technology',
-        email: 'nathan.williams@techcorp.com',
-        web_url: 'https://techcorp.com'
-    },
-    {
-        name: 'Sarah Johnson',
-        company: 'InnovateLabs',
-        designation: 'CTO',
-        industry: 'Software Development',
-        email: 'sarah.johnson@innovatelabs.com',
-        web_url: 'https://innovatelabs.com'
-    },
-    {
-        name: 'Michael Chen',
-        company: 'DataDrive Analytics',
-        designation: 'VP Sales',
-        industry: 'Data Analytics',
-        email: 'michael.chen@datadrive.io',
-        web_url: 'https://datadrive.io'
-    },
-    {
-        name: 'Emily Rodriguez',
-        company: 'CloudScale Inc',
-        designation: 'Director of Operations',
-        industry: 'Cloud Services',
-        email: 'emily.rodriguez@cloudscale.com',
-        web_url: 'https://cloudscale.com'
-    },
-    {
-        name: 'David Kim',
-        company: 'AIVentures',
-        designation: 'Founder & CEO',
-        industry: 'Artificial Intelligence',
-        email: 'david.kim@aiventures.ai',
-        web_url: 'https://aiventures.ai'
-    },
-    {
-        name: 'Jessica Martinez',
-        company: 'FinTech Pro',
-        designation: 'Head of Product',
-        industry: 'Financial Technology',
-        email: 'jessica.martinez@fintechpro.com',
-        web_url: 'https://fintechpro.com'
-    },
-    {
-        name: 'Robert Taylor',
-        company: 'CyberGuard Systems',
-        designation: 'VP Engineering',
-        industry: 'Cybersecurity',
-        email: 'robert.taylor@cyberguard.io',
-        web_url: 'https://cyberguard.io'
-    },
-    {
-        name: 'Amanda White',
-        company: 'HealthTech Solutions',
-        designation: 'Chief Medical Officer',
-        industry: 'Healthcare Technology',
-        email: 'amanda.white@healthtech.com',
-        web_url: 'https://healthtech.com'
-    }
-];
-
-function generateSubject(lead: Lead): string {
-    const subjects = [
-        `Exciting opportunity for ${lead.company}`,
-        `Transform ${lead.company}'s ${lead.industry} operations`,
-        `${lead.name}, let's discuss ${lead.company}'s growth`,
-        `Innovative solutions for ${lead.company}`,
-        `Partnership opportunity for ${lead.company}`
-    ];
-    return subjects[Math.floor(Math.random() * subjects.length)];
-}
-
-function generateEmailBody(lead: Lead): string {
-    return `Hello ${lead.name},
-
-I hope this email finds you well. I came across ${lead.company} and was impressed by your work in the ${lead.industry} industry.
-
-As ${lead.designation}, I believe you'd be interested in exploring how we can help ${lead.company} achieve its goals through our innovative solutions.
-
-I noticed your website (${lead.web_url}) and think there's a great opportunity for collaboration. Our platform has helped similar companies in ${lead.industry} increase efficiency by 40% and reduce costs significantly.
-
-Would you be open to a brief 15-minute call next week to discuss how we can add value to ${lead.company}?
-
-Looking forward to connecting!
-
-Best regards,
-Your Name
-Your Company`;
-}
-
-function generateEmails(leads: Lead[]): Email[] {
-    return leads.map(lead => ({
-        from: 'frommailid@gmail.com',
-        to: lead.email,
-        cc: 'ccmailid@gmail.com',
-        subject: generateSubject(lead),
-        body: generateEmailBody(lead),
-        attachments: ['Sample.pdf', 'Sample.pdf'],
-        lead
-    }));
-}
-
-export default function Home() {
-    const [emails, setEmails] = useState<Email[]>([]);
+    const [campaign, setCampaign] = useState<any>(null);
+    const [leads, setLeads] = useState<any[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
     const [searchTerm, setSearchTerm] = useState('');
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isProcessing, setIsProcessing] = useState(false);
-    const [progress, setProgress] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [isSending, setIsSending] = useState(false);
     const [toast, setToast] = useState({ message: '', type: '' as 'success' | 'error' | '', isVisible: false });
 
-    // Load sample data on mount
-    useEffect(() => {
-        const sampleEmails = generateEmails(SAMPLE_LEADS);
-        setEmails(sampleEmails);
-        // Select all by default
-        const allIds = new Set(sampleEmails.map((_, i) => i));
-        setSelectedIds(allIds);
-    }, []);
+    const fetchCampaignData = async () => {
+        try {
+            const data = await api.getCampaignDetails(campaignId);
+            setCampaign(data);
+            setLeads(data.leads || []);
 
-    const filteredEmails = emails.filter(email =>
-        email.to.toLowerCase().includes(searchTerm.toLowerCase())
+            // Map email structure for components
+            const formattedLeads = (data.leads || []).map((l: any) => ({
+                id: l.id,
+                to: l.mailid,
+                subject: l.emailContent?.subject || 'No Subject Generated',
+                body: l.emailContent?.body || 'No Content Generated',
+                status: l.status,
+                lead: l
+            }));
+            setLeads(formattedLeads);
+
+            // Select all by default
+            if (selectedIds.size === 0) {
+                const allIds = new Set(formattedLeads.map((_: any, i: number) => i)) as Set<number>;
+                setSelectedIds(allIds);
+            }
+            setError(null);
+        } catch (err: any) {
+            console.error('Failed to fetch campaign:', err);
+            setError('Failed to load campaign data.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchCampaignData();
+        // Polling for status updates (AI generation progress)
+        const interval = setInterval(fetchCampaignData, 5000);
+        return () => clearInterval(interval);
+    }, [campaignId]);
+
+    const filteredLeads = leads.filter(l =>
+        l.to.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const showToast = (message: string, type: 'success' | 'error') => {
         setToast({ message, type, isVisible: true });
-    };
-
-    const handleFileSelect = (file: File) => {
-        if (!file.name.endsWith('.csv')) {
-            showToast('Please upload a CSV file', 'error');
-            return;
-        }
-
-        setIsProcessing(true);
-        setProgress(0);
-
-        // Simulate progress
-        const interval = setInterval(() => {
-            setProgress(prev => {
-                if (prev >= 100) {
-                    clearInterval(interval);
-                    return 100;
-                }
-                return prev + 5;
-            });
-        }, 50);
-
-        Papa.parse(file, {
-            header: true,
-            complete: (results) => {
-                clearInterval(interval);
-                setProgress(100);
-
-                const leads = results.data as Lead[];
-                const validLeads = leads.filter(lead =>
-                    lead.email && lead.name && lead.company
-                );
-
-                if (validLeads.length === 0) {
-                    showToast('No valid leads found in CSV', 'error');
-                    setIsModalOpen(false);
-                    setIsProcessing(false);
-                    return;
-                }
-
-                const newEmails = generateEmails(validLeads);
-                setEmails(newEmails);
-                setSelectedIds(new Set(newEmails.map((_, i) => i)));
-                setCurrentIndex(0);
-
-                setTimeout(() => {
-                    setIsModalOpen(false);
-                    setIsProcessing(false);
-                    setProgress(0);
-                    showToast(`Successfully generated ${newEmails.length} emails!`, 'success');
-                }, 500);
-            },
-            error: () => {
-                clearInterval(interval);
-                showToast('Error reading file', 'error');
-                setIsModalOpen(false);
-                setIsProcessing(false);
-            }
-        });
-    };
-
-    const handleEmailUpdate = (field: string, value: any) => {
-        const updatedEmails = [...emails];
-        updatedEmails[currentIndex] = {
-            ...updatedEmails[currentIndex],
-            [field]: value
-        };
-        setEmails(updatedEmails);
     };
 
     const handleToggleSelect = (index: number) => {
@@ -243,71 +80,99 @@ export default function Home() {
     };
 
     const handleToggleSelectAll = () => {
-        if (selectedIds.size === emails.length) {
+        if (selectedIds.size === leads.length) {
             setSelectedIds(new Set());
         } else {
-            setSelectedIds(new Set(emails.map((_, i) => i)));
+            setSelectedIds(new Set(leads.map((_, i) => i)));
         }
     };
 
-    const handleNavPrevious = () => {
-        if (emails.length === 0) return;
-        setCurrentIndex(prev => prev === 0 ? emails.length - 1 : prev - 1);
-    };
+    const handleSend = async () => {
+        const selectedIndices = Array.from(selectedIds);
+        if (selectedIndices.length === 0) return;
 
-    const handleNavNext = () => {
-        if (emails.length === 0) return;
-        setCurrentIndex(prev => prev === emails.length - 1 ? 0 : prev + 1);
-    };
+        setIsSending(true);
+        showToast(`Starting delivery for ${selectedIndices.length} emails...`, 'success');
 
-    const handleSend = () => {
-        if (selectedIds.size === 0) {
-            showToast('Please select at least one email to send', 'error');
-            return;
+        let successCount = 0;
+        let failCount = 0;
+
+        for (const index of selectedIndices) {
+            const lead = leads[index];
+            try {
+                const response = await fetch(`${api.API_BASE_URL}/api/send-email`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        to: lead.to,
+                        subject: lead.subject,
+                        body: lead.body,
+                        leadId: lead.id
+                    })
+                });
+
+                if (response.ok) successCount++;
+                else failCount++;
+            } catch (err) {
+                failCount++;
+            }
         }
-        showToast(`Sending ${selectedIds.size} emails...`, 'success');
-        setTimeout(() => {
-            showToast(`Successfully sent ${selectedIds.size} emails!`, 'success');
-            setSelectedIds(new Set());
-        }, 2000);
+
+        setIsSending(false);
+        showToast(`Sent ${successCount} emails. ${failCount} failed.`, failCount > 0 ? 'error' : 'success');
+        fetchCampaignData();
     };
+
+    if (loading && !campaign) {
+        return (
+            <div className="flex flex-col items-center justify-center h-screen gap-4 text-gray-400 bg-[#0a0e1a]">
+                <Loader2 className="animate-spin" size={48} />
+                <p>Retrieving campaign leads...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex flex-col items-center justify-center h-screen gap-4 text-red-400 bg-[#0a0e1a]">
+                <AlertCircle size={48} />
+                <p>{error}</p>
+                <button onClick={fetchCampaignData} className="px-4 py-2 bg-blue-600 text-white rounded-md">Retry</button>
+            </div>
+        );
+    }
 
     return (
-        <div className="page-container">
-            {/* Breadcrumb */}
-            <div className="breadcrumb">
-                <Link href="/mail-management" className="breadcrumb-link">Mail Management</Link>
-                <ChevronRight size={16} className="breadcrumb-separator" />
-                <Link href="/mail-management/1" className="breadcrumb-link">Event 1</Link>
-                <ChevronRight size={16} className="breadcrumb-separator" />
-                <span className="breadcrumb-current">Review</span>
-            </div>
-
-            {/* Page Header */}
-            <div className="page-header">
-                <div>
-                    <h1 className="page-title">Event 1 - Review Emails</h1>
-                    <p className="page-subtitle">Review AI-generated emails before they're sent</p>
+        <div className="flex flex-col h-screen bg-[#0a0e1a]">
+            {/* Nav Header */}
+            <header className="flex items-center justify-between px-8 py-6 border-b border-[#1e293b] bg-[#0a0e1a]">
+                <div className="flex items-center gap-2 text-sm">
+                    <Link href="/mail-management" className="text-gray-500 hover:text-white transition-colors">
+                        Mail Management
+                    </Link>
+                    <ChevronRight className="text-gray-600" size={14} />
+                    <span className="text-white font-semibold">{campaign?.name}</span>
                 </div>
-                <div style={{ display: 'flex', gap: 'var(--spacing-md)' }}>
-                    <button className="btn-secondary" onClick={() => alert('Attachment feature coming soon!')}>
-                        <Paperclip size={16} />
+
+                <div className="flex items-center gap-3">
+                    <button className="px-6 py-2 border border-[#1e293b] text-white rounded-lg font-semibold flex items-center gap-2 hover:bg-[#1e293b] transition-all">
+                        <Paperclip size={18} />
                         Attach
                     </button>
                     <button
-                        className="btn-primary"
+                        className="px-6 py-2 bg-[#3b82f6] hover:bg-[#2563eb] disabled:opacity-50 text-white rounded-lg font-semibold flex items-center gap-2 transition-all"
                         onClick={handleSend}
-                        disabled={selectedIds.size === 0}
+                        disabled={selectedIds.size === 0 || isSending}
                     >
-                        <Send size={16} />
-                        Send {selectedIds.size} Email{selectedIds.size !== 1 ? 's' : ''}
+                        {isSending ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
+                        Send {selectedIds.size} Emails
                     </button>
                 </div>
-            </div>
+            </header>
 
-            <main className="main-content">
+            <main className="flex flex-1 overflow-hidden">
                 <Sidebar
-                    emails={filteredEmails}
+                    emails={filteredLeads}
                     selectedIndex={currentIndex}
                     onSelect={setCurrentIndex}
                     selectedIds={selectedIds}
@@ -317,25 +182,26 @@ export default function Home() {
                     onSearchChange={setSearchTerm}
                 />
 
-                <PreviewPanel
-                    email={emails[currentIndex]}
-                    onUpdate={handleEmailUpdate}
-                    selectedCount={selectedIds.size}
-                    onSend={handleSend}
-                    onNavPrevious={handleNavPrevious}
-                    onNavNext={handleNavNext}
-                    canNavPrevious={emails.length > 0}
-                    canNavNext={emails.length > 0}
-                />
+                <div className="flex-1 bg-[#0a0e1a] overflow-hidden">
+                    {leads.length > 0 ? (
+                        <PreviewPanel
+                            email={leads[currentIndex]}
+                            onUpdate={() => { }} // We'll implement direct DB update later
+                            selectedCount={selectedIds.size}
+                            onSend={handleSend} // Single send not implemented in UI yet
+                            onNavPrevious={() => setCurrentIndex(prev => prev > 0 ? prev - 1 : leads.length - 1)}
+                            onNavNext={() => setCurrentIndex(prev => prev < leads.length - 1 ? prev + 1 : 0)}
+                            canNavPrevious={leads.length > 1}
+                            canNavNext={leads.length > 1}
+                        />
+                    ) : (
+                        <div className="flex flex-col items-center justify-center h-full text-gray-600">
+                            <Loader2 size={48} className="animate-spin mb-4 opacity-20" />
+                            <p>Waiting for AI to generate content...</p>
+                        </div>
+                    )}
+                </div>
             </main>
-
-            <UploadModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onFileSelect={handleFileSelect}
-                isProcessing={isProcessing}
-                progress={progress}
-            />
 
             <Toast
                 message={toast.message}

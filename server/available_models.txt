@@ -1,0 +1,24 @@
+---------- GEMINI MODELS (Google) ----------
+gemini-1.5-flash        (Fast, High Rate Limit, 1M Context)
+gemini-1.5-pro          (Smarter, Lower Rate Limit, 2M Context)
+
+---------- GROQ MODELS (Fastest) ----------
+llama-3.1-8b-instant    (Super Fast, Good Quality)
+llama-3.3-70b-versatile (High Intelligence, slower than 8b)
+mixtral-8x7b-32768      (High Quality, good context)
+gemma2-9b-it            (Google's open model on Groq)
+
+---------- HUGGING FACE MODELS (Free Serverless) ----------
+meta-llama/Llama-3-8B-Instruct   (Good general purpose)
+Qwen/Qwen2.5-7B-Instruct         (Strong performance, similar to Llama 3)
+THUDM/GLM-4-9B                   (Strong bilingual/coding)
+microsoft/DialoGPT-medium        (Conversational, older)
+gpt2                             (Basic text generation, older)
+
+-----------------------------------------------------------
+INSTRUCTIONS:
+Please reply with your desired priority list (1 = First choice, 2 = Backup, etc).
+Example:
+1. gemini-1.5-flash
+2. llama-3.1-8b-instant
+3. meta-llama/Llama-3-8B-Instruct

@@ -37,53 +37,45 @@ export default function PreviewPanel({
     }
 
     return (
-        <section className="email-preview-panel">
-            <div className="email-content">
-                <div className="email-field">
-                    <div className="field-label">From:</div>
-                    <div className="field-value">{email.from}</div>
+        <section className="flex-1 overflow-y-auto bg-[#0a0e1a] p-12">
+            <div className="max-w-4xl mx-auto space-y-6">
+                <div className="grid grid-cols-[100px_1fr] items-center py-3 border-b border-[#1e293b]">
+                    <span className="text-sm text-gray-500">From:</span>
+                    <span className="text-sm text-white">{email.from}</span>
                 </div>
-                <div className="email-field">
-                    <div className="field-label">To:</div>
-                    <div className="field-value">{email.to}</div>
+                <div className="grid grid-cols-[100px_1fr] items-center py-3 border-b border-[#1e293b]">
+                    <span className="text-sm text-gray-500">To:</span>
+                    <span className="text-sm text-white">{email.to}</span>
                 </div>
-                <div className="email-field">
-                    <div className="field-label">Cc:</div>
-                    <div className="field-value">{email.cc}</div>
+                <div className="grid grid-cols-[100px_1fr] items-center py-3 border-b border-[#1e293b]">
+                    <span className="text-sm text-gray-500">Cc:</span>
+                    <span className="text-sm text-white">{email.cc}</span>
                 </div>
-                <div className="email-field">
-                    <div className="field-label">Subject:</div>
-                    <div className="field-value">
-                        <input
-                            type="text"
-                            value={email.subject}
-                            onChange={(e) => onUpdate('subject', e.target.value)}
-                        />
+
+                <div className="grid grid-cols-[100px_1fr] items-center py-3">
+                    <span className="text-sm text-gray-500">Subject:</span>
+                    <div className="bg-[#0f172a] border border-[#1e293b] rounded-lg p-3 text-sm text-white">
+                        {email.subject}
                     </div>
                 </div>
-                <div className="email-field">
-                    <div className="field-label">Body:</div>
-                    <div className="field-value">
-                        <textarea
-                            value={email.body}
-                            onChange={(e) => onUpdate('body', e.target.value)}
-                        />
+
+                <div className="grid grid-cols-[100px_1fr] py-3">
+                    <span className="text-sm text-gray-500 mt-3">Body:</span>
+                    <div className="bg-[#0f172a] border border-[#1e293b] rounded-lg p-6 text-sm text-white leading-relaxed min-h-[400px]">
+                        {email.body}
                     </div>
                 </div>
-                <div className="email-field">
-                    <div className="field-label">Attachments:</div>
-                    <div className="field-value">
-                        <div className="attachments">
-                            {email.attachments && email.attachments.map((att: string, index: number) => (
-                                <div key={index} className="attachment-tag">
-                                    <Paperclip size={14} />
-                                    {att}
-                                    <button className="remove-attachment">
-                                        <X size={14} />
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
+
+                <div className="pt-6">
+                    <span className="text-xs text-gray-500 mb-3 block">Attachments:</span>
+                    <div className="flex flex-wrap gap-3">
+                        {email.attachments && email.attachments.map((att: string, index: number) => (
+                            <div key={index} className="flex items-center gap-2 bg-[#0f172a] border border-[#1e293b] rounded p-2 text-xs text-white">
+                                <Paperclip size={14} />
+                                <span>{att}</span>
+                                <X size={14} className="text-red-500 cursor-pointer" />
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 /* ===========================
    CSS Reset & Base Styles
    =========================== */
@@ -8,15 +10,15 @@
 }
 
 :root {
-    /* Color Palette */
+    /* Refined Color Palette - Deep Dark Theme */
     --bg-primary: #0a0e1a;
-    --bg-secondary: #131824;
-    --bg-tertiary: #1a1f2e;
-    --bg-hover: #222838;
-    --border-color: #2a3142;
-    --text-primary: #e4e6eb;
-    --text-secondary: #9ca3af;
-    --text-muted: #6b7280;
+    --bg-secondary: #0f1624;
+    --bg-tertiary: #161e2e;
+    --bg-hover: #1e293b;
+    --border-color: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
     --accent-blue: #3b82f6;
     --accent-blue-hover: #2563eb;
     --accent-blue-light: rgba(59, 130, 246, 0.1);
@@ -24,7 +26,8 @@
     --error: #ef4444;
     --warning: #f59e0b;
 
-    /* Spacing */
+    /* Spacing & Sizing */
+    --sidebar-width: 280px;
     --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
     --spacing-md: 1rem;
@@ -33,17 +36,13 @@
 
     /* Border Radius */
     --radius-sm: 0.375rem;
-    --radius-md: 0.5rem;
-    --radius-lg: 0.75rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
 
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-
-    /* Transitions */
-    --transition-fast: 150ms ease-in-out;
-    --transition-normal: 250ms ease-in-out;
+    /* Shadows & Effects */
+    --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.1);
 }
 
 body {
@@ -796,6 +795,163 @@ body {
 .nav-item.active {
     background-color: var(--accent-blue);
     color: white;
+}
+
+/* Dashboard Specifics */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.stat-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    border-color: #2563eb;
+    background-color: #111a2e;
+}
+
+.stat-icon-box {
+    width: 48px;
+    height: 48px;
+    background-color: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-blue);
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Campaign Management Cards */
+.campaign-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.campaign-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.campaign-card:hover {
+    border-color: #2563eb;
+    background-color: #111a2e;
+}
+
+.campaign-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.campaign-stat-label {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.campaign-stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.campaign-arrow {
+    position: absolute;
+    bottom: var(--spacing-xl);
+    right: var(--spacing-xl);
+    width: 32px;
+    height: 32px;
+    border: 1px solid #1e293b;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-blue);
+}
+
+/* Modal Enhancements */
+.leadify-modal {
+    background-color: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    padding: 2.5rem;
+}
+
+.form-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.form-label span {
+    color: #ef4444;
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    background-color: #1a2333;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    color: white;
+    font-size: 0.875rem;
+}
+
+.form-textarea {
+    min-height: 120px;
+}
+
+.btn-upload {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #2563eb;
+    border-radius: 8px;
+    background-color: transparent;
+    color: #3b82f6;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 .main-app-content {

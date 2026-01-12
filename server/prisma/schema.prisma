@@ -1,0 +1,78 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  msalId    String   @unique
+  tokens    AuthToken?
+  campaigns Campaign[]
+  suppressions Suppression[]
+  createdAt DateTime @default(now())
+}
+
+model AuthToken {
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id])
+  accessToken  String
+  refreshToken String
+  expiresAt    DateTime
+}
+
+model Suppression {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  mailid    String
+  reason    String?
+  createdAt DateTime @default(now())
+
+  @@unique([userId, mailid])
+}
+
+model Campaign {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  name        String
+  description String?
+  status      String   @default("DRAFT") // DRAFT, RUNNING, COMPLETED
+  leads       Lead[]
+  createdAt   DateTime @default(now())
+}
+
+model Lead {
+  id         String   @id @default(uuid())
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id])
+  mailid     String
+  name       String?
+  designation String?
+  companyName String?
+  companyUrl  String?
+  status     String   @default("PENDING") // PENDING, GENERATED, SENT, NO_RESPONSE, REPLIED, FAILED
+  unsubscribed Boolean @default(false)
+  metadata   Json?
+  emailContent EmailContent?
+  createdAt  DateTime @default(now())
+}
+
+model EmailContent {
+  id          String   @id @default(uuid())
+  leadId      String   @unique
+  lead        Lead     @relation(fields: [leadId], references: [id])
+  subject     String
+  body        String
+  messageId   String?  // Microsoft Graph ID
+  trackingId  String   @unique @default(uuid())
+  openCount   Int      @default(0)
+  lastOpenedAt DateTime?
+  repliedAt   DateTime?
+}

@@ -11,20 +11,18 @@ export default function NavigationSidebar() {
     const navItems = [
         { href: '/', label: 'Dashboard', icon: LayoutDashboard },
         { href: '/mail-management', label: 'Mail Management', icon: Mail },
-        { href: '/suppressed', label: 'Suppressed Mail IDs', icon: Ban },
+        { href: '/suppressed', label: 'Suppressed Mail ID\'s', icon: Ban },
     ];
 
     return (
         <aside className="navigation-sidebar">
             <div className="sidebar-header">
-                <Image
-                    src="/leadify-logo.png"
-                    alt="Leadify"
-                    width={120}
-                    height={40}
-                    className="sidebar-logo"
-                    priority
-                />
+                <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
+                        <Mail className="text-white fill-current" size={20} />
+                    </div>
+                    <span className="text-xl font-bold text-white tracking-tight">Leadify</span>
+                </div>
             </div>
 
             <nav className="sidebar-nav">

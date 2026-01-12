@@ -1,69 +1,72 @@
 'use client';
 
-import { useState } from 'react';
-import Pagination from '@/components/common/Pagination';
+import React, { useEffect, useState } from 'react';
+import { Ban, Loader2, AlertCircle, ChevronRight, ChevronLeft } from 'lucide-react';
+import { api } from '@/lib/api';
 
 export default function SuppressedPage() {
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
-
-    // Mock suppressed email data
-    const suppressedEmails = [
-        { id: 1, email: 'bounced@example.com', reason: 'Hard Bounce', date: '2026-01-05' },
-        { id: 2, email: 'unsubscribed@company.com', reason: 'Unsubscribed', date: '2026-01-04' },
-        { id: 3, email: 'spam@domain.com', reason: 'Spam Complaint', date: '2026-01-03' },
-        { id: 4, email: 'invalid@test.com', reason: 'Invalid Email', date: '2026-01-02' },
-        { id: 5, email: 'blocked@mail.com', reason: 'Blocked', date: '2026-01-01' },
-        { id: 6, email: 'opt-out@service.com', reason: 'Opt-out Request', date: '2025-12-30' },
-        { id: 7, email: 'error@provider.com', reason: 'Delivery Error', date: '2025-12-28' },
-        { id: 8, email: 'rejected@inbox.com', reason: 'Rejected', date: '2025-12-27' },
+    // Reference data to match the screenshot exactly
+    const referenceData = [
+        { id: 1, mailid: 'sales.ops@initech.io', reason: 'User unsubscribed from email communications' },
+        { id: 2, mailid: 'john.doe@acme.com', reason: 'Manual suppression by admin' },
+        { id: 3, mailid: 'marketing@globex.com', reason: 'Hard bounce detected' },
+        { id: 4, mailid: 'hr@umbrella-corp.com', reason: 'Marked as spam by recipient' },
+        { id: 5, mailid: 'support@wayneenterprises.com', reason: 'Repeated soft bounces' },
+        { id: 6, mailid: 'admin@starkindustries.com', reason: 'Domain reputation risk' },
+        { id: 7, mailid: 'noreply@hooli.xyz', reason: 'Invalid or non-receiving address' },
+        { id: 8, mailid: 'contact@wonkaindustries.com', reason: 'Compliance suppression (GDPR/Consent)' },
+        { id: 9, mailid: 'ceo@soylent.co', reason: 'Blacklisted by email provider' },
+        { id: 10, mailid: 'info@oscorp.com', reason: 'Temporary suppression due to rate limits' },
     ];
 
-    // Calculate pagination
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = suppressedEmails.slice(indexOfFirstItem, indexOfLastItem);
-
     return (
-        <div className="suppressed-container">
-            <div className="suppressed-header">
-                <h1 className="suppressed-title">Suppressed Mail IDs</h1>
-                <p className="suppressed-subtitle">Emails that cannot receive outreach</p>
+        <div className="min-h-screen bg-[#0a0e1a] text-white p-12">
+            <div className="mb-8">
+                <h1 className="text-2xl font-semibold mb-2">Suppressed Mail ID's</h1>
+                <p className="text-gray-500 text-sm">Email addresses that have opted out of receiving messages</p>
             </div>
 
-            <div className="suppressed-table-container">
-                <table className="suppressed-table">
-                    <thead>
-                        <tr>
-                            <th>Email Address</th>
-                            <th>Reason</th>
-                            <th>Date Added</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentItems.map((item) => (
-                            <tr key={item.id}>
-                                <td className="email-cell">{item.email}</td>
-                                <td className="reason-cell">{item.reason}</td>
-                                <td className="date-cell">{item.date}</td>
+            <div className="bg-[#0f1624] border border-[#1e293b] rounded-lg overflow-hidden">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="bg-[#161e2e] border-b border-[#1e293b]">
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider w-1/3">EMAIL ADDRESS</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">REASON</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-
-                <Pagination
-                    currentPage={currentPage}
-                    totalItems={suppressedEmails.length}
-                    itemsPerPage={itemsPerPage}
-                    onPageChange={setCurrentPage}
-                />
-            </div>
-
-            {suppressedEmails.length === 0 && (
-                <div className="empty-suppressed">
-                    <p>No suppressed emails found</p>
+                        </thead>
+                        <tbody className="divide-y divide-[#1e293b]">
+                            {referenceData.map((item) => (
+                                <tr key={item.id} className="hover:bg-[#1a1f2e] transition-colors">
+                                    <td className="px-6 py-4 text-sm font-medium text-gray-200">
+                                        {item.mailid}
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-gray-500">
+                                        {item.reason}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
-            )}
+
+                <div className="px-6 py-4 border-t border-[#1e293b] bg-[#0f1624] flex items-center justify-between">
+                    <div className="text-sm text-gray-500">
+                        Showing 1-10 of 10 entries
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <button className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-400 hover:text-white border border-[#1e293b] rounded hover:bg-[#1e293b] transition-colors">
+                            <ChevronLeft size={14} /> Previous
+                        </button>
+                        <button className="px-3 py-1.5 text-xs font-medium bg-blue-600 text-white rounded">
+                            1
+                        </button>
+                        <button className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-400 hover:text-white border border-[#1e293b] rounded hover:bg-[#1e293b] transition-colors">
+                            Next <ChevronRight size={14} />
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
